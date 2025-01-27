@@ -4,11 +4,16 @@ import uuid
 
 
 class Project:
-    PROJECTS_TYPES = ((1, "back-end"), (2, "front-end"), (3, "iOS"), (4, "Android"))
+    class ProjectTypes(models.TextChoices):
+        BACKEND = "back-end"
+        FRONTEND = "front-end"
+        IOS = "iOS"
+        ANDROID = "Android"
+
     author = models.ForeignKey(null=True, to=User)
     name = models.CharField(max_length=255, null=False)
     description = models.TextField(null=True)
-    project_type = models.IntegerField(null=True, choices=PROJECTS_TYPES)
+    project_type = models.CharField(null=True, choices=ProjectTypes.choices)
     created_time = models.DateTimeField(auto_now_add=True)
 
 
@@ -19,21 +24,29 @@ class Contributor:
 
 
 class Issue:
-    PRIORITY_CHOICES = ((1, "LOW"), (2, "MEDIUM"), (3, "HIGH"))
-    STATUS_CHOICES = ((1, "To Do"), (2, "In Progress"), (3, "Finished"))
-    BALISE_CHOICES = (
-        (1, "BUG"),
-        (2, "TASK"),
-        (3, "FEATURE"),
-    )
+    class PriorityChoices(models.TextChoices):
+        LOW = "LOW"
+        MEDIUM = "MEDIUM"
+        HIGH = "HIGH"
+
+    class StatusChoices(models.TextChoices):
+        TODO = "To Do"
+        IN_PROGRESS = "In Progress"
+        FINISHED = "Finished"
+
+    class BaliseChoices(models.TextChoices):
+        BUG = "BUG"
+        TASK = "TASK"
+        FEATURE = "FEATURE"
+
     name = models.CharField(max_length=255, null=False)
     description = models.TextField(null=True)
     project = models.ForeignKey(null=True, to=Project)
-    status = models.IntegerField(
-        max_length=250, null=False, choices=STATUS_CHOICES, default=1
+    status = models.CharField(
+        max_length=250, null=False, choices=StatusChoices.choices, default=1
     )
-    priority = models.CharField(null=True, choices=PRIORITY_CHOICES)
-    balise = models.IntegerField(null=True, choices=BALISE_CHOICES)
+    priority = models.CharField(null=True, choices=PriorityChoices.choices)
+    balise = models.CharField(null=True, choices=BaliseChoices.choices)
     created_time = models.DateTimeField(auto_now_add=True)
     user_attribution = models.ForeignKey(null=True, to=User)
     author = models.ForeignKey(null=True, to=User)
