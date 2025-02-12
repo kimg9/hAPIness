@@ -9,4 +9,3 @@ class User(AbstractUser):
     )
     can_be_contacted = models.BooleanField(null=False, default=True)
     can_data_be_shared = models.BooleanField(null=False, default=True)
-    # suscribed_project = models.ManyToManyField(null=True, to=Project)
