@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'hAPIness.urls'
+ROOT_URLCONF = 'API_settings.urls'
 
 TEMPLATES = [
     {
@@ -70,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'hAPIness.wsgi.application'
+WSGI_APPLICATION = 'API_settings.wsgi.application'
 
 DATABASE_ENGINE = ''
 DATABASE_NAME = ''
@@ -139,3 +139,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+
+APPEND_SLASH=False
