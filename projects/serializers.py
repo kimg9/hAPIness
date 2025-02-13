@@ -1,10 +1,7 @@
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from rest_framework import serializers
-from projects.models import Project
-from projects.models import Issue
-from projects.models import Comment
-from projects.models import Contributor
+from projects.models import Comment, Issue, Project
 
 
 class ProjectSerializer(ModelSerializer):

@@ -1,6 +1,8 @@
-from django.db import models
-from authentification.models import User
 import uuid
+
+from django.db import models
+
+from authentification.models import User
 
 
 class Project(models.Model):
