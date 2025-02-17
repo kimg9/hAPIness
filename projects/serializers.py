@@ -5,8 +5,6 @@ from projects.models import Comment, Issue, Project
 
 
 class ProjectSerializer(ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
-
     class Meta:
         model = Project
         fields = '__all__'
