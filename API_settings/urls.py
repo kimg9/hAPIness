@@ -1,15 +1,11 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework import routers
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from rest_framework_simplejwt.views import (TokenObtainPairView,
+                                            TokenRefreshView)
 
 from authentification.views import UserViewset
-from projects.views import ProjectViewset
-from projects.views import IssueViewset
-from projects.views import CommentViewset
+from projects.views import CommentViewset, IssueViewset, ProjectViewset
 
 router = routers.SimpleRouter()
 router.register("user", UserViewset, basename="user")
