@@ -1,19 +1,18 @@
-from rest_framework.exceptions import ValidationError
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Comment, Contributor, Issue, Project
-from .permissions import IsOwnerOfItem
-from .permissions import IsProjectContributor
-from .permissions import IsProjectContributorOfIssue
-from .permissions import IsProjectContributorOfComment
-from .permissions import AnyoneCanRegister
+from .permissions import (IsOwnerOfItem, IsProjectContributor,
+                          IsProjectContributorOfComment,
+                          IsProjectContributorOfIssue)
 from .serializers import CommentSerializer, IssueSerializer, ProjectSerializer
 
 
 class ProjectViewset(ModelViewSet):
     serializer_class = ProjectSerializer
-    queryset = Project.objects.all()
-    permission_classes = [AnyoneCanRegister, IsProjectContributor, IsOwnerOfItem]
+    permission_classes = [IsProjectContributor | IsOwnerOfItem]
+    
+    def get_queryset(self):
+        return Project.objects.filter(contributor__user=self.request.user)
 
     def perform_create(self, serializer):
         request_user = self.request.user
@@ -25,27 +24,21 @@ class ProjectViewset(ModelViewSet):
 
 class IssueViewset(ModelViewSet):
     serializer_class = IssueSerializer
-    queryset = Issue.objects.all()
-    permission_classes = [IsOwnerOfItem, IsProjectContributorOfIssue]
+    permission_classes = [IsOwnerOfItem | IsProjectContributorOfIssue]
+    
+    def get_queryset(self):
+        return Issue.objects.filter(project__contributor__user=self.request.user)
 
     def perform_create(self, serializer):
-        contributors = Contributor.objects.filter(
-            projects=serializer.validated_data["project"]
-        )
-        if serializer.validated_data["user_attribution"] not in (
-            contributor.user for contributor in contributors
-        ):
-            raise ValidationError(
-                "L'utilisateur attribué n'est pas un contributeur du projet."
-            )
-
         serializer.save(author=self.request.user)
 
 
 class CommentViewset(ModelViewSet):
     serializer_class = CommentSerializer
-    queryset = Comment.objects.all()
-    permission_classes = [IsOwnerOfItem, IsProjectContributorOfComment]
+    permission_classes = [IsOwnerOfItem | IsProjectContributorOfComment]
+    
+    def get_queryset(self):
+        return Comment.objects.filter(issue__project__contributor__user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
