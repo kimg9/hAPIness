@@ -5,7 +5,6 @@ from .models import Contributor
 CONSULT_OR_CREATE_METHODS = (
     "GET",
     "POST",
-    "PATCH"
 )
 
 class IsOwnerOfItem(permissions.BasePermission):
